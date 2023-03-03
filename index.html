@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>VR Shapes</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<header>
+		<h1>VR Shapes</h1>
+	</header>
+	<main>
+		<section>
+			<h2>Speak the name of a shape</h2>
+			<p>Examples: sphere, box, cylinder</p>
+			<button id="start-button">Start Recognition</button>
+			<p id="shape-output"></p>
+		</section>
+		<section id="vr-canvas">
+			<p>This is where the VR environment will be displayed</p>
+		</section>
+	</main>
+
+	<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+	<script src="app.js"></script>
+
+	<script>
+		window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+		const recognition = new SpeechRecognition();
+	</script>
+	<script>
+		recognition.addEventListener('result', e => {
+		  const transcript = e.results[0][0].transcript;
+		  console.log(transcript); // Log the recognized speech for testing purposes
+		  displayShape(transcript);
+		});
+	  
+		function startRecognition() {
+		  recognition.start();
+		}
+	  
+		function stopRecognition() {
+		  recognition.stop();
+		}
+	</script>
+	<script>
+		function displayShape(shapeName) {
+		  const shapeOutput = document.querySelector('#shape-output');
+		  shapeOutput.textContent = shapeName;
+	  
+		  if (shapeName === 'sphere') {
+		    const scene = document.querySelector('a-scene');
+		    const sphere = document.createElement('a-sphere');
+		    sphere.setAttribute('color', 'red');
+		    sphere.setAttribute('radius', '1');
+		    scene.appendChild(sphere);
+		  } else if (shapeName === 'box') {
+		    const scene = document.querySelector('a-scene');
+		    const box = document.createElement('a-box');
+		    box.setAttribute('color', 'blue');
+		    box.setAttribute('depth', '1');
+		    box.setAttribute('height', '1');
+		    box.setAttribute('width', '1');
+		    scene.appendChild(box);
+		  } else if (shapeName === 'cylinder') {
+		    const scene = document.querySelector('a-scene');
+		    const cylinder = document.createElement('a-cylinder');
+		    cylinder.setAttribute('color', 'green');
+		    cylinder.setAttribute('height', '1');
+		    cylinder.setAttribute('radius', '1');
+		    scene.appendChild(cylinder);
+		  }
+		}
+	</script>
+
+	<script>
+		const button = document.querySelector('#start-button');
+		button.addEventListener('click', startRecognition);
+	</script>
+</body>
+</html>
